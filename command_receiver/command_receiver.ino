@@ -10,6 +10,11 @@
 const char* ssid = "blinky";
 const char* password = "swarm_net";
 
+// Manually set IP address
+IPAddress local_IP(10, 42, 0, 50);   // Choose something outside DHCP range (e.g., .50)
+IPAddress gateway(10, 42, 0, 1);     // Usually the hotspot IP
+IPAddress subnet(255, 255, 255, 0);      // Standard subnet mask
+
 // ---- UDP settings ----
 WiFiUDP udp;
 const unsigned int localPort = 4210;  // Port to listen on
@@ -24,6 +29,12 @@ float r_angular_vel, l_angular_vel;
 
 void setup() {
     Serial.begin(115200);
+    delay(1000);
+
+    Serial.println("Configuring static IP...");
+    if (!WiFi.config(local_IP, gateway, subnet)) {
+        Serial.println("Failed to configure static IP");
+    }
 
     // Connect to WiFi
     Serial.print("Connecting to WiFi...");
