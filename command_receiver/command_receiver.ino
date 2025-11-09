@@ -11,7 +11,7 @@ const char* ssid = "blinky";
 const char* password = "swarm_net";
 
 // Manually set IP address
-IPAddress local_IP(10, 42, 0, 50);   // Choose something outside DHCP range (e.g., .50)
+IPAddress local_IP(10, 42, 0, 30);   // Choose something outside DHCP range (e.g., .50)
 IPAddress gateway(10, 42, 0, 1);     // Usually the hotspot IP
 IPAddress subnet(255, 255, 255, 0);      // Standard subnet mask
 
@@ -66,18 +66,25 @@ void loop() {
         int len = udp.read(incomingPacket, 255);
         if (len > 0) incomingPacket[len] = '\0';  // null-terminate the string
     
+        // I temporarilly commented this out so that I can just test with strings of any format
         // Parse the input string, splitting it by the comma delimiter
-        char *token = strtok(incomingPacket, ",");
-        if (token != NULL) l_angular_vel = atof(token);
+        // char *token = strtok(incomingPacket, ",");
+        // if (token != NULL) l_angular_vel = atof(token);
         
-        token = strtok(NULL, ",");
-        if (token != NULL) r_angular_vel = atof(token);
+        // token = strtok(NULL, ",");
+        // if (token != NULL) r_angular_vel = atof(token);
         
         Serial.print("Received packet from ");
         Serial.print(udp.remoteIP());
         Serial.print(":");
         Serial.println(udp.remotePort());
-        Serial.printf("l_angular_vel: %.2f, r_angular_vel: %.2f\n", l_angular_vel, r_angular_vel);
+        // Serial.printf("l_angular_vel: %.2f, r_angular_vel: %.2f\n", l_angular_vel, r_angular_vel);
+        Serial.println(incomingPacket);
+
+        // Echo back the same message to sender
+        udp.beginPacket(udp.remoteIP(), udp.remotePort());
+        udp.print(incomingPacket);
+        udp.endPacket();
     }
 
     // TODO: can lower delay for faster responses
