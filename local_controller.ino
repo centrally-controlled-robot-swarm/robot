@@ -144,6 +144,9 @@ void loop() {
         else {
             if (!halted) {
                 //Should be receiving in this range but mainting a safety check regardless
+                if (leftPWM > 255 || rightPWM > 255 || leftPWM < 0 || rightPWM < 0) {
+                    Serial.println("OUTSIDE EXPECTED VALUES, NEED TO CONSTRAIN");
+                }
                 leftPWM = constrain(leftPWM, 0, 255);
                 rightPWM = constrain(rightPWM, 0, 255);
                 Serial.printf
