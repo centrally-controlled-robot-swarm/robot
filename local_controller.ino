@@ -36,7 +36,8 @@ int enable2Pin = 25;
 // PWM presets
 const int freq = 30000;
 const int resolution = 8;
-
+const int pwmChannelLeft = 0;
+const int pwmChannelRight = 1;
 
 ///////////
 // SETUP //
@@ -56,11 +57,8 @@ void setup() {
     pinMode(enable2Pin, OUTPUT);
 
     // Configure PWM channels
-    ledcAttachPin(enable1Pin, 0);
-    ledcSetup(0, freq, resolution);
-
-    ledcAttachPin(enable2Pin, 1);
-    ledcSetup(1, freq, resolution);
+    ledcAttachChannel(enable1Pin, freq, resolution, pwmChannelLeft);
+    ledcAttachChannel(enable2Pin, freq, resolution, pwmChannelRight);
 
     Serial.println("Configuring static IP...");
     if (!WiFi.config(local_IP, gateway, subnet)) {
